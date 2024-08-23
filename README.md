@@ -6,3 +6,7 @@ Design details:
 - The main thread creates the first task
 - Threads consume and produce tasks
 - The program ends when all tasks are done
+
+How to run the program:
+- g++ -std=c++2a main.cpp (testing was done using c++2a, haven't tested with other versions)
+- ./a.out
