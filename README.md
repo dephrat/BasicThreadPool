@@ -1,6 +1,6 @@
 # BasicThreadPool
 This is just my first attempt at implementing a C-style thread pool using POSIX threads (pthread.h). 
-The point is to prep for turning my 'PuzzleSolver' project multithreaded.
+The point is to prepare for turning my 'PuzzleSolver' project multithreaded.
 
 Design details:  
 - Main thread creates the first task.  
