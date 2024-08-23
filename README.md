@@ -9,5 +9,5 @@ Design details:
 
 How to run the program:
 - `cd` into the repo
-- 'g++ -std=c++2a main.cpp' (testing was done using c++2a, haven't tested with other versions)
-- './a.out'
+- `g++ -std=c++2a main.cpp` (testing was done using c++2a, haven't tested with other versions)
+- `./a.out`
