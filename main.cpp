@@ -64,28 +64,28 @@ void* startup(void* args) {
         }
 
         //take tasks from the queue
-#if USE_BATCHING
-        int numTasksToMove = std::min(taskQueue.size(), BATCH_SIZE);
-        std::vector<Task> tasksToProcess;
-        for (int i = 0; i < numTasksToMove; ++i) {
-            tasksToProcess.push_back(std::move(taskQueue.front()));
+        #if USE_BATCHING
+            int numTasksToMove = std::min(taskQueue.size(), BATCH_SIZE);
+            std::vector<Task> tasksToProcess;
+            for (int i = 0; i < numTasksToMove; ++i) {
+                tasksToProcess.push_back(std::move(taskQueue.front()));
+                taskQueue.pop_front();
+            }
+        #else
+            Task task = std::move(taskQueue.front());
             taskQueue.pop_front();
-        }
-#else
-        Task task = std::move(taskQueue.front());
-        taskQueue.pop_front();
-#endif
+        #endif
         activeThreads++; //this thread took a Task or batch of Tasks, so it's active!
         pthread_mutex_unlock(&queueLock);
         
         ///executor: execute task
         std::list<Task> results;
-#if USE_BATCHING
-        for (int i = 0; i < numTasksToMove; ++i)
-            results.splice(results.end(), execute(tasksToProcess[i]));
-#else
-        results = execute(task);
-#endif
+        #if USE_BATCHING
+            for (int i = 0; i < numTasksToMove; ++i)
+                results.splice(results.end(), execute(tasksToProcess[i]));
+        #else
+            results = execute(task);
+        #endif
 
         ///producer: add task
         pthread_mutex_lock(&queueLock);
@@ -103,33 +103,33 @@ int main() {
     std::chrono::duration<double, std::milli> fp_ms;
     const auto start = Time::now();
 
-#if MULTITHREADING
-    taskQueue.emplace_back(START_NUM);
+    #if MULTITHREADING
+        taskQueue.emplace_back(START_NUM);
 
-    pthread_mutex_init(&queueLock, NULL);
-    pthread_cond_init(&queueCond, NULL);
+        pthread_mutex_init(&queueLock, NULL);
+        pthread_cond_init(&queueCond, NULL);
 
-    for (int i = 0; i < NUM_THREADS; ++i) 
-        if (pthread_create(&threadPool[i], NULL, startup, NULL) != 0) 
-            std::cerr << "Failed to create thread" << std::endl;      
-    for (int i = 0; i < NUM_THREADS; ++i) 
-        if (pthread_join(threadPool[i], NULL) != 0) 
-            std::cerr << "Failed to join thread" << std::endl;   
+        for (int i = 0; i < NUM_THREADS; ++i) 
+            if (pthread_create(&threadPool[i], NULL, startup, NULL) != 0) 
+                std::cerr << "Failed to create thread" << std::endl;      
+        for (int i = 0; i < NUM_THREADS; ++i) 
+            if (pthread_join(threadPool[i], NULL) != 0) 
+                std::cerr << "Failed to join thread" << std::endl;   
 
-    pthread_mutex_destroy(&queueLock);
-    pthread_cond_destroy(&queueCond);
-#else
-    int i = START_NUM;
-    double numTimes = 1;
-    while (i >= 0) {
-        for (double j = 0; j < numTimes; ++j) {
-            usleep(5000);
-            std::cout << std::to_string(i) << std::flush;
+        pthread_mutex_destroy(&queueLock);
+        pthread_cond_destroy(&queueCond);
+    #else
+        int i = START_NUM;
+        double numTimes = 1;
+        while (i >= 0) {
+            for (double j = 0; j < numTimes; ++j) {
+                usleep(5000);
+                std::cout << std::to_string(i) << std::flush;
+            }
+            i--;
+            numTimes *= BRANCHING_FACTOR;
         }
-        i--;
-        numTimes *= BRANCHING_FACTOR;
-    }
-#endif
+    #endif
     const auto end = Time::now();
     fp_ms = end - start;
     std::cout << "Solving finished. Time taken (s): " << fp_ms.count()/1000 << std::endl;
