@@ -132,5 +132,5 @@ int main() {
     #endif
     const auto end = Time::now();
     fp_ms = end - start;
-    std::cout << "Solving finished. Time taken (s): " << fp_ms.count()/1000 << std::endl;
+    std::cout << "\nSolving finished. Time taken (s): " << fp_ms.count()/1000 << std::endl;
 }
