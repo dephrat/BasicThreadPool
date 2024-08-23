@@ -2,9 +2,11 @@
 #define START_NUM 5
 #define BRANCHING_FACTOR 4
 #define WAIT_TIME 5000
+
 //Multithreading values:
 #define MULTITHREADING true
 #define NUM_THREADS 64
+
 //Batch processing values:
 #define USE_BATCHING false
 #define BATCH_SIZE static_cast<size_t>(4)
