@@ -15,5 +15,5 @@ What it does:
 
 How to run the program:
 - `cd` into the repo
-- `g++ -std=c++2a main.cpp` (testing was done using c++2a, haven't tested with other versions)
+- `g++ -std=c++2a main.cpp` (testing was done using c++2a, I haven't tested it with other versions)
 - `./a.out`
