@@ -8,5 +8,6 @@ Design details:
 - The program ends when all tasks are done
 
 How to run the program:
-- g++ -std=c++2a main.cpp (testing was done using c++2a, haven't tested with other versions)
-- ./a.out
+- 'cd' into the repo
+- 'g++ -std=c++2a main.cpp' (testing was done using c++2a, haven't tested with other versions)
+- './a.out'
