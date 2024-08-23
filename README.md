@@ -3,6 +3,5 @@ This is just my first attempt at implementing a C-style thread pool using POSIX 
 The point is to prepare for turning my 'PuzzleSolver' project multithreaded.
 
 Design details:  
-- Main thread creates the first task.  
-- Thread pool takes tasks, executes them, and returns the result to the queue for other threads to work on.  
-- Once all tasks are complete, the program stops.
+- Threads are both consumers and producers 
+- Main thread creates the first task
