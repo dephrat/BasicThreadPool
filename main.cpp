@@ -1,13 +1,13 @@
-#define NUM_THREADS 64
-#define BATCH_SIZE static_cast<size_t>(4)
+//Problem-defining values:
 #define START_NUM 5
 #define BRANCHING_FACTOR 4
 #define WAIT_TIME 5000
-
-#define USE_BATCHING false
-
-//Use this to see the difference between single- and multi-threaded runtimes!
+//Multithreading values:
 #define MULTITHREADING true
+#define NUM_THREADS 64
+//Batch processing values:
+#define USE_BATCHING false
+#define BATCH_SIZE static_cast<size_t>(4)
 
 #include <algorithm>
 #include <chrono>
@@ -74,7 +74,6 @@ void* startup(void* args) {
         taskQueue.pop_front();
 #endif
         activeThreads++; //this thread took a Task or batch of Tasks, so it's active!
-        //release mutex
         pthread_mutex_unlock(&queueLock);
         
         ///executor: execute task
